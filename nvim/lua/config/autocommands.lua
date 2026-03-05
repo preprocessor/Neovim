@@ -4,10 +4,21 @@ end
 vim.g.did_load_autocommands_plugin = true
 
 local api = vim.api
+local autocmd = api.nvim_create_autocmd
+local function augroup(name)
+  return vim.api.nvim_create_augroup(name, { clear = true })
+end
 
-local tempdirgroup = api.nvim_create_augroup('tempdir', { clear = true })
+vim.cmd([[
+  augroup RestoreCursorShapeOnExit
+      autocmd!
+      autocmd VimLeave * set guicursor=a:ver10-blinkon500-blinkoff500-blinkwait1
+  augroup END
+]])
+
+local tempdirgroup = augroup('tempdir')
 -- Do not set undofile for files in /tmp
-api.nvim_create_autocmd('BufWritePre', {
+autocmd('BufWritePre', {
   pattern = '/tmp/*',
   group = tempdirgroup,
   callback = function()
@@ -15,9 +26,130 @@ api.nvim_create_autocmd('BufWritePre', {
   end,
 })
 
+-- Check if we need to reload the file when it changed
+autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
+  group = augroup('checktime'),
+  callback = function()
+    if vim.o.buftype ~= 'nofile' then
+      vim.cmd('checktime')
+    end
+  end,
+})
+
+-- Highlight on yank
+autocmd('TextYankPost', {
+  group = augroup('highlight_yank'),
+  callback = function()
+    (vim.hl or vim.highlight).on_yank()
+  end,
+})
+
+-- resize splits if window got resized
+autocmd({ 'VimResized' }, {
+  group = augroup('resize_splits'),
+  callback = function()
+    local current_tab = vim.fn.tabpagenr()
+    vim.cmd('tabdo wincmd =')
+    vim.cmd('tabnext ' .. current_tab)
+  end,
+})
+
+-- go to last loc when opening a buffer
+autocmd('BufReadPost', {
+  group = augroup('last_loc'),
+  callback = function(event)
+    local exclude = { 'gitcommit' }
+    local buf = event.buf
+    if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].lazyvim_last_loc then
+      return
+    end
+    vim.b[buf].lazyvim_last_loc = true
+    local mark = vim.api.nvim_buf_get_mark(buf, '"')
+    local lcount = vim.api.nvim_buf_line_count(buf)
+    if mark[1] > 0 and mark[1] <= lcount then
+      pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    end
+  end,
+})
+
+-- close some filetypes with <q>
+autocmd('FileType', {
+  group = augroup('close_with_q'),
+  pattern = {
+    'PlenaryTestPopup',
+    'checkhealth',
+    'dbout',
+    'gitsigns-blame',
+    'grug-far',
+    'help',
+    'lspinfo',
+    'neotest-output',
+    'neotest-output-panel',
+    'neotest-summary',
+    'notify',
+    'qf',
+    'spectre_panel',
+    'startuptime',
+    'tsplayground',
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.schedule(function()
+      vim.keymap.set('n', 'q', function()
+        vim.cmd('close')
+        pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
+      end, {
+        buffer = event.buf,
+        silent = true,
+        desc = 'Quit buffer',
+      })
+    end)
+  end,
+})
+
+-- make it easier to close man-files when opened inline
+autocmd('FileType', {
+  group = augroup('man_unlisted'),
+  pattern = { 'man' },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+  end,
+})
+
+-- wrap and check for spell in text filetypes
+autocmd('FileType', {
+  group = augroup('wrap_spell'),
+  pattern = { 'text', 'plaintex', 'typst', 'gitcommit', 'markdown' },
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.spell = true
+  end,
+})
+
+-- Fix conceallevel for json files
+autocmd({ 'FileType' }, {
+  group = augroup('json_conceal'),
+  pattern = { 'json', 'jsonc', 'json5' },
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+-- Auto create dir when saving a file, in case some intermediate directory does not exist
+autocmd({ 'BufWritePre' }, {
+  group = augroup('auto_create_dir'),
+  callback = function(event)
+    if event.match:match('^%w%w+:[\\/][\\/]') then
+      return
+    end
+    local file = vim.uv.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
+  end,
+})
+
 -- Disable spell checking in terminal buffers
-local nospell_group = api.nvim_create_augroup('nospell', { clear = true })
-api.nvim_create_autocmd('TermOpen', {
+local nospell_group = augroup('nospell')
+autocmd('TermOpen', {
   group = nospell_group,
   callback = function()
     vim.wo[0].spell = false
@@ -49,21 +181,21 @@ local function peek_type_definition()
 end
 
 --- Don't create a comment string when hitting <Enter> on a comment line
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = vim.api.nvim_create_augroup('DisableNewLineAutoCommentString', {}),
+autocmd('BufEnter', {
+  group = augroup('DisableNewLineAutoCommentString'),
   callback = function()
     vim.opt.formatoptions = vim.opt.formatoptions - { 'c', 'r', 'o' }
   end,
 })
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+autocmd('LspAttach', {
+  group = augroup('UserLspConfig'),
   callback = function(ev)
     local bufnr = ev.buf
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
 
     -- Attach plugins
-    require('nvim-navic').attach(client, bufnr)
+    -- require('nvim-navic').attach(client, bufnr)
 
     vim.cmd.setlocal('signcolumn=yes')
     vim.bo[bufnr].bufhidden = 'hide'
@@ -97,7 +229,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.buf.format { async = true }
     end, desc('[lsp] [f]ormat buffer'))
     if client and client.server_capabilities.inlayHintProvider then
-      keymap.set('n', '<space>h', function()
+      keymap.set('n', '<space>i', function()
         local current_setting = vim.lsp.inlay_hint.is_enabled { bufnr = bufnr }
         vim.lsp.inlay_hint.enable(not current_setting, { bufnr = bufnr })
       end, desc('[lsp] toggle inlay hints'))
@@ -107,9 +239,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if not client then
       return
     end
-    local group = api.nvim_create_augroup(string.format('lsp-%s-%s', bufnr, client.id), {})
+    local group = augroup(string.format('lsp-%s-%s', bufnr, client.id))
     if client.server_capabilities.codeLensProvider then
-      vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
+      autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
         group = group,
         callback = function()
           vim.lsp.codelens.refresh { bufnr = bufnr }
@@ -120,29 +252,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end
   end,
 })
-
--- More examples, disabled by default
-
--- Toggle between relative/absolute line numbers
--- Show relative line numbers in the current buffer,
--- absolute line numbers in inactive buffers
--- local numbertoggle = api.nvim_create_augroup('numbertoggle', { clear = true })
--- api.nvim_create_autocmd({ 'BufEnter', 'FocusGained', 'InsertLeave', 'CmdlineLeave', 'WinEnter' }, {
---   pattern = '*',
---   group = numbertoggle,
---   callback = function()
---     if vim.o.nu and vim.api.nvim_get_mode().mode ~= 'i' then
---       vim.opt.relativenumber = true
---     end
---   end,
--- })
--- api.nvim_create_autocmd({ 'BufLeave', 'FocusLost', 'InsertEnter', 'CmdlineEnter', 'WinLeave' }, {
---   pattern = '*',
---   group = numbertoggle,
---   callback = function()
---     if vim.o.nu then
---       vim.opt.relativenumber = false
---       vim.cmd.redraw()
---     end
---   end,
--- })

@@ -7,3 +7,14 @@ vim.g.did_load_plugins_plugin = true
 -- even with default configs
 
 require('nvim-surround').setup()
+require('ts-comments').setup()
+require('nvim-highlight-colors').setup {}
+require('mini.icons').setup {
+  file = {
+    ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },
+    ['devcontainer.json'] = { glyph = '', hl = 'MiniIconsAzure' },
+  },
+  filetype = {
+    dotenv = { glyph = '', hl = 'MiniIconsYellow' },
+  },
+}

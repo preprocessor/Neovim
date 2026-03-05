@@ -1,10 +1,13 @@
 # This overlay, when applied to nixpkgs, adds the final neovim derivation to nixpkgs.
-{inputs}: final: prev:
-with final.pkgs.lib; let
+{ inputs }:
+final: prev:
+with final.pkgs.lib;
+let
   pkgs = final;
 
   # Use this to create a plugin from a flake input
-  mkNvimPlugin = src: pname:
+  mkNvimPlugin =
+    src: pname:
     pkgs.vimUtils.buildVimPlugin {
       inherit pname src;
       version = src.lastModifiedDate;
@@ -12,12 +15,12 @@ with final.pkgs.lib; let
 
   # Make sure we use the pinned nixpkgs instance for wrapNeovimUnstable,
   # otherwise it could have an incompatible signature when applying this overlay.
-  pkgs-locked = inputs.nixpkgs.legacyPackages.${pkgs.system};
+  pkgs-locked = inputs.nixpkgs.legacyPackages.${pkgs.stdenv.hostPlatform.system};
 
   # This is the helper function that builds the Neovim derivation.
   mkNeovim = pkgs.callPackage ./mkNeovim.nix {
-      inherit (pkgs-locked) wrapNeovimUnstable neovimUtils;
-    };
+    inherit (pkgs-locked) wrapNeovimUnstable neovimUtils;
+  };
 
   # A plugin can either be a package or an attrset, such as
   # { plugin = <plugin>; # the package, e.g. pkgs.vimPlugins.nvim-cmp
@@ -30,67 +33,82 @@ with final.pkgs.lib; let
   all-plugins = with pkgs.vimPlugins; [
     # plugins from nixpkgs go in here.
     # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
-    nvim-treesitter.withAllGrammars
-    luasnip # snippets | https://github.com/l3mon4d3/luasnip/
-    # nvim-cmp (autocompletion) and extensions
-    nvim-cmp # https://github.com/hrsh7th/nvim-cmp
-    cmp_luasnip # snippets autocompletion extension for nvim-cmp | https://github.com/saadparwaiz1/cmp_luasnip/
-    lspkind-nvim # vscode-like LSP pictograms | https://github.com/onsails/lspkind.nvim/
-    cmp-nvim-lsp # LSP as completion source | https://github.com/hrsh7th/cmp-nvim-lsp/
-    cmp-nvim-lsp-signature-help # https://github.com/hrsh7th/cmp-nvim-lsp-signature-help/
-    cmp-buffer # current buffer as completion source | https://github.com/hrsh7th/cmp-buffer/
-    cmp-path # file paths as completion source | https://github.com/hrsh7th/cmp-path/
-    cmp-nvim-lua # neovim lua API as completion source | https://github.com/hrsh7th/cmp-nvim-lua/
-    cmp-cmdline # cmp command line suggestions
-    cmp-cmdline-history # cmp command line history suggestions
-    # ^ nvim-cmp extensions
-    # git integration plugins
-    diffview-nvim # https://github.com/sindrets/diffview.nvim/
-    neogit # https://github.com/TimUntersberger/neogit/
-    gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
-    vim-fugitive # https://github.com/tpope/vim-fugitive/
-    # ^ git integration plugins
-    # telescope and extensions
-    telescope-nvim # https://github.com/nvim-telescope/telescope.nvim/
-    telescope-fzy-native-nvim # https://github.com/nvim-telescope/telescope-fzy-native.nvim
-    # telescope-smart-history-nvim # https://github.com/nvim-telescope/telescope-smart-history.nvim
-    # ^ telescope and extensions
-    # UI
-    lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
-    nvim-navic # Add LSP location to lualine | https://github.com/SmiteshP/nvim-navic
-    statuscol-nvim # Status column | https://github.com/luukvbaal/statuscol.nvim/
+
+    # Colorscheme
+    gruvbox-nvim
+
+    # Language
+    nvim-lspconfig
+    treesitter-modules-nvim # syntax tree parser | https://github.com/MeanderingProgrammer/treesitter-modules.nvim/
+    ts-comments-nvim # enhance Neovim's native comments | https://github.com/folke/ts-comments.nvim/
     nvim-treesitter-context # nvim-treesitter-context
-    # ^ UI
-    # language support
-    # ^ language support
-    # navigation/editing enhancement plugins
-    vim-unimpaired # predefined ] and [ navigation keymaps | https://github.com/tpope/vim-unimpaired/
-    eyeliner-nvim # Highlights unique characters for f/F and t/T motions | https://github.com/jinh0/eyeliner.nvim
-    nvim-surround # https://github.com/kylechui/nvim-surround/
     nvim-treesitter-textobjects # https://github.com/nvim-treesitter/nvim-treesitter-textobjects/
     nvim-ts-context-commentstring # https://github.com/joosepalviste/nvim-ts-context-commentstring/
-    # ^ navigation/editing enhancement plugins
+
+    # git integration plugins
+    gitsigns-nvim # https://github.com/lewis6991/gitsigns.nvim/
+
+    # UI
+    lualine-nvim # Status line | https://github.com/nvim-lualine/lualine.nvim/
+    nui-nvim # UI Component Library | https://github.com/MunifTanjim/nui.nvim
+    noice-nvim # Highly experimental UI plugin | https://github.com/folke/noice.nvim/
+    yazi-nvim # Use yazi within neovim
+
+    blink-cmp # Completion plugin | https://github.com/saghen/blink.cmp
+    luasnip # snippet engine | https://github.com/l3mon4d3/luasnip/
+    friendly-snippets # snippets | https://github.com/rafamadriz/friendly-snippets/
+
+    statuscol-nvim # Status column | https://github.com/luukvbaal/statuscol.nvim/
+
+    # navigate your code with search labels, enhanced character motions, and Treesitter integration
+    flash-nvim # https://github.com/folke/flash.nvim/
+
+    trouble-nvim # A pretty diagnostics list | https://github.com/folke/trouble.nvim/
+
+    # Mini.nvim
+    mini-pairs # https://github.com/nvim-mini/mini.pairs/
+    mini-icons # https://github.com/nvim-mini/mini.icons/
+    mini-ai # https://github.com/nvim-mini/mini.ai/
+
+    # Code formatting + linting
+    conform-nvim # Lightweight yet powerful formatter | https://github.com/stevearc/conform.nvim/
+    nvim-lint # An asynchronous linter | https://codeberg.org/mfussenegger/nvim-lint/
+
+    # navigation/editing enhancement plugins
+    grug-far-nvim # Find And Replace plugin for neovim | https://github.com/MagicDuck/grug-far.nvim
+    hop-nvim # https://github.com/smoka7/hop.nvim
+
+    vim-unimpaired # predefined ] and [ navigation keymaps | https://github.com/tpope/vim-unimpaired/
+    nvim-surround # https://github.com/kylechui/nvim-surround/
+
     # Useful utilities
     nvim-unception # Prevent nested neovim sessions | nvim-unception
-    # ^ Useful utilities
+    lazydev-nvim # Faster LuaLS setup for Neovim | https://github.com/folke/lazydev.nvim/
+    snacks-nvim # A collection of small QoL plugins | https://github.com/folke/snacks.nvim/
+    comment-box-nvim # draw boxes and lines in comments | https://github.com/LudoPinelli/comment-box.nvim/
+    nvim-highlight-colors # Highlight colors | https://github.com/brenoprata10/nvim-highlight-colors/
+    todo-comments-nvim # Highlight, list and search todo comments | https://github.com/folke/todo-comments.nvim/
+    persistence-nvim # Simple session management | https://github.com/folke/persistence.nvim/
+
     # libraries that other plugins depend on
-    sqlite-lua
     plenary-nvim
-    nvim-web-devicons
+    nvim-web-devicons # Nerd Font icons | https://github.com/nvim-tree/nvim-web-devicons
     vim-repeat
-    # ^ libraries that other plugins depend on
+
+    which-key-nvim
+
     # bleeding-edge plugins from flake inputs
     # (mkNvimPlugin inputs.wf-nvim "wf.nvim") # (example) keymap hints | https://github.com/Cassin01/wf.nvim
-    # ^ bleeding-edge plugins from flake inputs
-    which-key-nvim
   ];
 
   extraPackages = with pkgs; [
     # language servers, etc.
     lua-language-server
     nil # nix LSP
+    rust-analyzer
   ];
-in {
+in
+{
   # This is the neovim derivation
   # returned by the overlay
   nvim-pkg = mkNeovim {

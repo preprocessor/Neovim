@@ -3,6 +3,7 @@ if vim.g.did_load_completion_plugin then
 end
 vim.g.did_load_completion_plugin = true
 
+local blink_dict = require('blink-cmp-dictionary')
 local blink = require('blink.cmp')
 -- local luasnip = require('luasnip')
 -- local lspkind = require('friendly-snippets')
@@ -72,7 +73,19 @@ blink.setup({
   },
 
   sources = {
-    default = { 'lsp', 'path', 'snippets', 'buffer' },
+    default = { 'lsp', 'path', 'snippets', 'buffer', 'dictionary' },
+    providers = {
+      dictionary = {
+        module = 'blink-cmp-dictionary',
+        name = 'Dict',
+        min_keyword_length = 1,
+        opts = {
+          -- Optional: explicitly force fallback mode
+          -- (By default, fallback is used when fzf is not found)
+          force_fallback = true,
+        }
+      }
+    },
   },
 
   snippets = { preset = 'luasnip' },

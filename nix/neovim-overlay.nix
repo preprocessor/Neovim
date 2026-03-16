@@ -35,11 +35,15 @@ let
     # https://search.nixos.org/packages?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=vimPlugins
 
     # Colorscheme
-    gruvbox-nvim
+    (mkNvimPlugin inputs.everforest "everforest")
+
+    zellij-nav-nvim
 
     # Language
     nvim-lspconfig
-    treesitter-modules-nvim # syntax tree parser | https://github.com/MeanderingProgrammer/treesitter-modules.nvim/
+
+    # treesitter-modules-nvim # syntax tree parser | https://github.com/MeanderingProgrammer/treesitter-modules.nvim/
+    nvim-treesitter.withAllGrammars
     ts-comments-nvim # enhance Neovim's native comments | https://github.com/folke/ts-comments.nvim/
     nvim-treesitter-context # nvim-treesitter-context
     nvim-treesitter-textobjects # https://github.com/nvim-treesitter/nvim-treesitter-textobjects/
@@ -55,6 +59,8 @@ let
     yazi-nvim # Use yazi within neovim
 
     blink-cmp # Completion plugin | https://github.com/saghen/blink.cmp
+    blink-cmp-dictionary
+
     luasnip # snippet engine | https://github.com/l3mon4d3/luasnip/
     friendly-snippets # snippets | https://github.com/rafamadriz/friendly-snippets/
 
@@ -97,6 +103,9 @@ let
 
     which-key-nvim
 
+    # Rust stuff
+    crates-nvim # A neovim plugin that helps managing crates.io dependencies | https://github.com/Saecki/crates.nvim
+
     # bleeding-edge plugins from flake inputs
     # (mkNvimPlugin inputs.wf-nvim "wf.nvim") # (example) keymap hints | https://github.com/Cassin01/wf.nvim
   ];
@@ -106,6 +115,7 @@ let
     lua-language-server
     nil # nix LSP
     rust-analyzer
+    rustfmt
   ];
 in
 {

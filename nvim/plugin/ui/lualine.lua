@@ -45,14 +45,39 @@ local Snacks = require("snacks")
 require('lualine').setup {
   globalstatus = true,
   options = {
-    theme = "auto",
+    theme = "everforest",
     disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
+    section_separators = { left = '', right = '' },
+    component_separators = { left = '│', right = '│' }
   },
   sections = {
-    lualine_a = { "mode" },
+    lualine_a = { {
+      "mode",
+      fmt = function(str)
+        return str:sub(1, 3)
+      end,
+    } },
     lualine_b = { "branch" },
     lualine_c = {
-      "location",
+      {
+        "diff",
+        symbols = {
+          added = " ",
+          modified = " ",
+          removed = " ",
+        },
+        source = function()
+          local gitsigns = vim.b.gitsigns_status_dict
+          if gitsigns then
+            return {
+              added = gitsigns.added,
+              modified = gitsigns.changed,
+              removed = gitsigns.removed,
+            }
+          end
+        end,
+      },
+
       "filename",
       {
         symbols and symbols.get,
@@ -62,7 +87,7 @@ require('lualine').setup {
       }
     },
 
-    lualine_x = {
+    lualine_x = { 'encoding', 'fileformat', 'filetype',
       Snacks.profiler.status(),
       -- stylua: ignore
       {
@@ -82,35 +107,14 @@ require('lualine').setup {
         cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
         color = function() return { fg = Snacks.util.color("Debug") } end,
       },
-      {
-        "diff",
-        symbols = {
-          added = " ",
-          modified = " ",
-          removed = " ",
-        },
-        source = function()
-          local gitsigns = vim.b.gitsigns_status_dict
-          if gitsigns then
-            return {
-              added = gitsigns.added,
-              modified = gitsigns.changed,
-              removed = gitsigns.removed,
-            }
-          end
-        end,
-      },
     },
     lualine_y = {
-      { "progress", separator = " ", padding = { left = 1, right = 0 } },
+      { "progress", padding = { left = 1, right = 1 } },
       { "location", padding = { left = 0, right = 1 } },
     },
     lualine_z = {
-      function()
-        return " " .. os.date("%R")
-      end,
       { extra_mode_status },
-    },
+    }
   },
-  extensions = { "neo-tree", "lazy", "fzf" },
+  extensions = { "fzf" },
 }

@@ -1,4 +1,3 @@
-local cmd = vim.cmd
 local opt = vim.opt
 
 vim.g.mapleader = ' '
@@ -16,8 +15,8 @@ opt.showmatch = true -- Highlight matching parentheses, etc
 opt.incsearch = true
 opt.hlsearch = true
 
--- opt.spell = true
--- opt.spelllang = 'en'
+opt.spell = true
+opt.spelllang = 'en'
 
 opt.expandtab = true
 opt.fillchars = [[foldopen:,foldclose:,diff:╱,fold: ,foldsep: ,eob: ]]
@@ -38,8 +37,6 @@ opt.splitright = true
 opt.splitbelow = true
 opt.cmdheight = 0
 
-opt.colorcolumn = '100'
-
 opt.clipboard = vim.env.SSH_CONNECTION and '' or 'unnamedplus' -- Sync with system clipboard
 opt.completeopt = 'menu,menuone,noselect'
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
@@ -57,7 +54,6 @@ opt.jumpoptions = 'view'
 opt.laststatus = 3 -- global statusline
 opt.list = true -- Show some invisible characters (tabs...
 
-opt.pumblend = 10 -- Popup blend
 opt.pumheight = 10 -- Maximum number of entries in a popup
 
 opt.ruler = false -- Disable the default ruler
@@ -80,12 +76,11 @@ opt.wildmode = 'longest:full,full' -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.mousemodel = 'extend'
 opt.virtualedit = 'block'
-opt.wrap = true
+opt.wrap = false
 opt.linebreak = true
 opt.breakindent = true
 opt.breakindentopt = 'sbr,shift:5'
 opt.mousescroll = 'ver:1,hor:0'
-opt.winblend = 5
 opt.showbreak = ' 󱞵 '
 
 opt.smoothscroll = true
@@ -143,7 +138,7 @@ vim.diagnostic.config {
   float = {
     focusable = false,
     style = 'minimal',
-    border = 'rounded',
+    border = 'single',
     source = 'if_many',
     header = '',
     prefix = '',

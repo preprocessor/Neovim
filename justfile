@@ -1,7 +1,7 @@
 default:update
 
 update:
-  nix profile upgrade Neovim
+  nix profile upgrade nvim
 
 try:
   just update

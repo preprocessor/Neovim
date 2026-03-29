@@ -37,8 +37,6 @@ let
     # Colorscheme
     (mkNvimPlugin inputs.everforest "everforest")
 
-    zellij-nav-nvim
-
     # Language
     nvim-lspconfig
 
@@ -57,6 +55,7 @@ let
     nui-nvim # UI Component Library | https://github.com/MunifTanjim/nui.nvim
     noice-nvim # Highly experimental UI plugin | https://github.com/folke/noice.nvim/
     yazi-nvim # Use yazi within neovim
+    virt-column-nvim # Display a character as the colorcolumn.
 
     blink-cmp # Completion plugin | https://github.com/saghen/blink.cmp
     blink-cmp-dictionary
@@ -68,6 +67,7 @@ let
 
     # navigate your code with search labels, enhanced character motions, and Treesitter integration
     flash-nvim # https://github.com/folke/flash.nvim/
+    hop-nvim
 
     trouble-nvim # A pretty diagnostics list | https://github.com/folke/trouble.nvim/
 
@@ -75,6 +75,7 @@ let
     mini-pairs # https://github.com/nvim-mini/mini.pairs/
     mini-icons # https://github.com/nvim-mini/mini.icons/
     mini-ai # https://github.com/nvim-mini/mini.ai/
+    mini-surround # https://github.com/nvim-mini/mini.surround/
 
     # Code formatting + linting
     conform-nvim # Lightweight yet powerful formatter | https://github.com/stevearc/conform.nvim/
@@ -85,7 +86,6 @@ let
     hop-nvim # https://github.com/smoka7/hop.nvim
 
     vim-unimpaired # predefined ] and [ navigation keymaps | https://github.com/tpope/vim-unimpaired/
-    nvim-surround # https://github.com/kylechui/nvim-surround/
 
     # Useful utilities
     nvim-unception # Prevent nested neovim sessions | nvim-unception

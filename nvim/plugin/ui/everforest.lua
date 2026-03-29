@@ -4,7 +4,7 @@ require('everforest').setup {
   background = 'hard',
   ---How much of the background should be transparent. 2 will have more UI
   ---components be transparent (e.g. status line background)
-  -- transparent_background_level = 2,
+  transparent_background_level = 2,
   ---Whether italics should be used for keywords and more.
   italics = false,
   ---Disable italic fonts for comments. Comments are in italics by default, set
@@ -48,13 +48,19 @@ require('everforest').setup {
   ---
   ---NB: This is only significant for dark backgrounds as the light palettes
   ---have the same colour for both values in the switch.
-  float_style = 'bright',
+  float_style = 'dim',
   ---Inlay hints are special markers that are displayed inline with the code to
   ---provide you with additional information. You can use this option to customize
   ---the background color of inlay hints.
   ---
   ---Options are `"none"` or `"dimmed"`.
   inlay_hints_background = 'none',
+  colours_override = function(palette)
+    palette.bg0 = '#1E2326'
+  end,
+  on_highlights = function(hl, palette)
+    hl.FloatBorder = { bg = palette.none }
+  end,
 }
 
 vim.opt.background = 'dark'

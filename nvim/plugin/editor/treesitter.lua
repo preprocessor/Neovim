@@ -11,26 +11,6 @@ require('nvim-treesitter').setup {
   folds = { enable = true },
 }
 
-map({ 'n', 'x', 'o' }, 's', function()
-  require('flash').jump()
-end, { desc = 'Flash' })
-
-map({ 'n', 'o', 'x' }, 'S', function()
-  require('flash').treesitter()
-end, { desc = 'Flash Treesitter' })
-
-map('o', 'r', function()
-  require('flash').remote()
-end, { desc = 'Remote Flash' })
-
-map({ 'o', 'x' }, 'R', function()
-  require('flash').treesitter_search()
-end, { desc = 'Treesitter Search' })
-
-map({ 'c' }, '<c-s>', function()
-  require('flash').toggle()
-end, { desc = 'Toggle Flash Search' })
-
 -- Simulate nvim-treesitter incremental selection
 map({ 'n', 'o', 'x' }, '<c-space>', function()
   require('flash').treesitter { actions = { ['<c-space>'] = 'next', ['<BS>'] = 'prev' } }
@@ -55,10 +35,10 @@ end, {})
 -- swap
 map('n', '<leader>a', function()
   require('nvim-treesitter-textobjects.swap').swap_next('@parameter.inner')
-end, {})
+end, { desc = 'Swap curent parameter with next' })
 map('n', '<leader>A', function()
   require('nvim-treesitter-textobjects.swap').swap_previous('@parameter.outer')
-end, {})
+end, { desc = 'Swap curent parameter with previous' })
 
 -- move
 map({ 'n', 'x', 'o' }, ']m', function()

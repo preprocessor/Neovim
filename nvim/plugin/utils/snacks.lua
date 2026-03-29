@@ -62,7 +62,6 @@ Snacks.toggle
   .option('showtabline', { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = 'Tabline' })
   :map('<leader>uA')
 Snacks.toggle.treesitter():map('<leader>uT')
-Snacks.toggle.option('background', { off = 'light', on = 'dark', name = 'Dark Background' }):map('<leader>ub')
 Snacks.toggle.dim():map('<leader>uD')
 Snacks.toggle.animate():map('<leader>ua')
 Snacks.toggle.indent():map('<leader>ug')
@@ -96,6 +95,7 @@ end, { desc = 'Delete Buffer' })
 map('n', '<leader>bo', function()
   Snacks.bufdelete.other()
 end, { desc = 'Delete Other Buffers' })
+
 -- Scratch buffers
 map('n', '<leader>.', function()
   Snacks.scratch()
@@ -110,25 +110,33 @@ end, { desc = 'Profiler Scratch Buffer' })
 map('n', '<leader>,', function()
   Snacks.picker.buffers()
 end, { desc = 'Buffers' })
+
 map('n', '<leader>/', function()
-  Snacks.picker.grep()
+  -- Snacks.picker.grep()
+  local git_root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  local cwd = (git_root and vim.v.shell_error == 0) and git_root or vim.fn.getcwd()
+  Snacks.picker.grep { cwd = cwd }
 end, { desc = 'Grep (Root Dir)' })
+
 map('n', '<leader>:', function()
   Snacks.picker.command_history()
 end, { desc = 'Command History' })
+
 map('n', '<leader><space>', function()
-  Snacks.picker.files()
-end, { desc = 'Find Files' })
+  -- Snacks.picker.smart()
+  local git_root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  local cwd = (git_root and vim.v.shell_error == 0) and git_root or vim.fn.getcwd()
+  Snacks.picker.files { cwd = cwd }
+end, { desc = 'Find Files (Root Dir)' })
+
 map('n', '<leader>n', function()
   Snacks.picker.notifications()
 end, { desc = 'Notification History' })
 map('n', '<leader>un', function()
   Snacks.notifier.hide()
 end, { desc = 'Dismiss All Notifications' })
+
 -- find
-map('n', '<leader>fb', function()
-  Snacks.picker.buffers()
-end, { desc = 'Buffers' })
 map('n', '<leader>fB', function()
   Snacks.picker.buffers { hidden = true, nofile = true }
 end, { desc = 'Buffers (all)' })

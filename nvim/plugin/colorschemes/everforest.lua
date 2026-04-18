@@ -65,4 +65,4 @@ require('everforest').setup {
 
 vim.opt.background = 'dark'
 
-vim.cmd.colorscheme('everforest')
+-- vim.cmd.colorscheme('everforest')

@@ -1,3 +1,101 @@
+local excluded = {
+  'node_modules/',
+  'dist/',
+  '.next/',
+  '.vite/',
+  '.git/',
+  '.gitlab/',
+  'build/',
+  'target/',
+  'result/',
+  'dadbod_ui/tmp/',
+  'dadbod_ui/dev/',
+  'package-lock.json',
+  'pnpm-lock.yaml',
+  'yarn.lock',
+  'flake.lock',
+}
+
+local root_patterns = {
+  -- directories
+  'client',
+  'server',
+
+  -- version control systems
+  '_darcs',
+  '.hg',
+  '.bzr',
+  '.svn',
+  '.git',
+
+  -- build tools
+  'Makefile',
+  'CMakeLists.txt',
+  'build.gradle',
+  'build.gradle.kts',
+  'pom.xml',
+  'build.xml',
+
+  -- node.js and javascript
+  'package.json',
+  'package-lock.json',
+  'yarn.lock',
+  '.nvmrc',
+  'gulpfile.js',
+  'Gruntfile.js',
+
+  -- python
+  'requirements.txt',
+  'Pipfile',
+  'pyproject.toml',
+  'setup.py',
+  'tox.ini',
+
+  -- rust
+  'Cargo.toml',
+
+  -- go
+  'go.mod',
+
+  -- elixir
+  'mix.exs',
+
+  -- configuration files
+  '.prettierrc',
+  '.prettierrc.json',
+  '.prettierrc.yaml',
+  '.prettierrc.yml',
+  '.eslintrc',
+  '.eslintrc.json',
+  '.eslintrc.js',
+  '.eslintrc.cjs',
+  '.eslintignore',
+  '.stylelintrc',
+  '.stylelintrc.json',
+  '.stylelintrc.yaml',
+  '.stylelintrc.yml',
+  '.editorconfig',
+  '.gitignore',
+
+  -- html projects
+  'index.html',
+
+  -- miscellaneous
+  'README.md',
+  'README.rst',
+  'LICENSE',
+  'Vagrantfile',
+  'Procfile',
+  '.env',
+  '.env.example',
+  'config.yaml',
+  'config.yml',
+  '.terraform',
+  'terraform.tfstate',
+  '.kitchen.yml',
+  'Berksfile',
+}
+
 local function term_nav(dir)
   ---@param self snacks.terminal
   return function(self)
@@ -23,6 +121,11 @@ require('snacks').setup {
       trouble_open = function(...)
         return require('trouble.sources.snacks').actions.trouble_open.action(...)
       end,
+    },
+    sources = {
+      explorer = { exclude = excluded },
+      grep = { exclude = excluded },
+      files = { exclude = excluded },
     },
     win = {
       input = {
@@ -271,8 +374,7 @@ end, { desc = 'Todo/Fix/Fixme' })
 
 -- lazygit
 if vim.fn.executable('lazygit') == 1 then
-  -- map("n", "<leader>gg", function() Snacks.lazygit( { cwd = LazyVim.root.git() }) end, { desc = "Lazygit (Root Dir)" })
-  map('n', '<leader>gG', function()
+  map('n', '<leader>gg', function()
     Snacks.lazygit()
   end, { desc = 'Lazygit (cwd)' })
 end

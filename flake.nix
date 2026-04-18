@@ -2,7 +2,7 @@
   description = "Neovim derivation";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     flake-utils.url = "github:numtide/flake-utils";
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
 
@@ -10,13 +10,6 @@
       url = "github:neanias/everforest-nvim";
       flake = false;
     };
-
-    # Add bleeding-edge plugins here.
-    # They can be updated with `nix flake update` (make sure to commit the generated flake.lock)
-    # wf-nvim = {
-    #   url = "github:Cassin01/wf.nvim";
-    #   flake = false;
-    # };
   };
 
   outputs =
@@ -27,11 +20,10 @@
       ...
     }:
     let
-
       systems = builtins.attrNames nixpkgs.legacyPackages;
 
-      # This is where the Neovim derivation is built.
       neovim-overlay = import ./nix/neovim-overlay.nix { inherit inputs; };
+      # This is where the Neovim derivation is built.
     in
     flake-utils.lib.eachSystem systems (
       system:

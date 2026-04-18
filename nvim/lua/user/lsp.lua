@@ -1,8 +1,4 @@
----@mod user.lsp
----
----@brief [[
 ---LSP related functions
----@brief ]]
 
 local M = {}
 
@@ -18,9 +14,9 @@ function M.make_client_capabilities()
     textDocument = {
       foldingRange = {
         dynamicRegistration = false,
-        lineFoldingOnly = true
-      }
-    }
+        lineFoldingOnly = true,
+      },
+    },
   })
   -- Add any additional plugin capabilities here.
   -- Make sure to follow the instructions provided in the plugin's docs.

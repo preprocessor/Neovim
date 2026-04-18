@@ -3,11 +3,11 @@
     "everforest": {
       "flake": false,
       "locked": {
-        "lastModified": 1773010757,
-        "narHash": "sha256-PXZpEl2CIlgmXqqFMh1nSwxGOtiM0jmKYDBF2DoVCpc=",
+        "lastModified": 1775558268,
+        "narHash": "sha256-q3rwQjC/462W6b8NLyBVZdWNVacfHlBBCoGQzaMAWoo=",
         "owner": "neanias",
         "repo": "everforest-nvim",
-        "rev": "323e7633034a8068636a11597cec03bca5465c50",
+        "rev": "cf08aa67fc96946a01177ae483b7631733b4b5e6",
         "type": "github"
       },
       "original": {
@@ -197,18 +197,15 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1773646010,
-        "narHash": "sha256-iYrs97hS7p5u4lQzuNWzuALGIOdkPXvjz7bviiBjUu8=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "5b2c2d84341b2afb5647081c1386a80d7a8d8605",
-        "type": "github"
+        "lastModified": 1775710090,
+        "narHash": "sha256-WGjBfvXv/mcg5yBg+AtK1Q3FHyXfjAAeJROmg7DLYfM=",
+        "rev": "4c1018dae018162ec878d42fec712642d214fdfa",
+        "type": "tarball",
+        "url": "https://releases.nixos.org/nixos/unstable/nixos-26.05pre977467.4c1018dae018/nixexprs.tar.xz"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
+        "type": "tarball",
+        "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
       }
     },
     "root": {

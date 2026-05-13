@@ -6,7 +6,7 @@ vim.g.did_load_treesitter_plugin = true
 local map = vim.keymap.set
 
 require('nvim-treesitter').setup {
-  indent = { enable = true },
+  indent = { enable = false },
   highlight = { enable = true },
   folds = { enable = true },
 }

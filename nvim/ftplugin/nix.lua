@@ -10,12 +10,9 @@ local root_files = {
   '.git',
 }
 
-vim.lsp.start {
-  name = 'nil_ls',
-  cmd = { 'nil' },
-  root_dir = vim.fs.dirname(vim.fs.find(root_files, { upward = true })[1]),
-  capabilities = require('user.lsp').make_client_capabilities(),
+require('lspconfig').nil_ls.setup {
   settings = {
+    formatting = { command = { 'nix fmt' } },
     nix = {
       flake = {
         -- calls `nix flake archive` to put a flake and its output to store
@@ -23,4 +20,11 @@ vim.lsp.start {
       },
     },
   },
+}
+
+vim.lsp.start {
+  name = 'nil_ls',
+  cmd = { 'nil' },
+  root_dir = vim.fs.dirname(vim.fs.find(root_files, { upward = true })[1]),
+  capabilities = require('user.lsp').make_client_capabilities(),
 }

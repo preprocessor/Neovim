@@ -5,11 +5,6 @@
     nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
     flake-utils.url = "github:numtide/flake-utils";
     gen-luarc.url = "github:mrcjkb/nix-gen-luarc-json";
-
-    everforest = {
-      url = "github:neanias/everforest-nvim";
-      flake = false;
-    };
   };
 
   outputs =
@@ -30,6 +25,7 @@
       let
         pkgs = import nixpkgs {
           inherit system;
+          config.allowUnfree = true;
           overlays = [
             # Import the overlay, so that the final Neovim derivation(s) can be accessed via pkgs.<nvim-pkg>
             neovim-overlay

@@ -1,0 +1,19 @@
+-- local ls = require('luasnip')
+-- local snippet = ls.snippet
+-- local text = ls.text_node
+-- local insert = ls.insert_mode
+--
+-- ls.add_snippets('nix', {
+--   snippet('!mod', {
+--     text('{...}\n'),
+--     text('{\n'),
+--     text('  w.default ='),
+--     text('    { ... }:\n'),
+--     text('    {\n'),
+--     text('    '),
+--     insert(1),
+--     text('\n'),
+--     text('    };\n'),
+--     text('}\n'),
+--   }),
+-- })

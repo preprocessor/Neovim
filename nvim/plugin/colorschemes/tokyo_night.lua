@@ -31,9 +31,9 @@ require('tokyonight').setup {
 
   cache = true, -- When set to true, the theme will be cached for better performance
 
-  plugins = {
-    all = true,
-  },
+  plugins = { all = true },
 }
+
+require('lualine').setup { options = { theme = 'tokyonight' } }
 
 vim.cmd.colorscheme('tokyonight')

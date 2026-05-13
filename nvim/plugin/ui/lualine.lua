@@ -26,45 +26,44 @@ local function extra_mode_status()
   return ''
 end
 
-local trouble = require("trouble")
-local symbols = trouble.statusline({
-  mode = "symbols",
+local trouble = require('trouble')
+local symbols = trouble.statusline {
+  mode = 'symbols',
   groups = {},
   title = false,
   filter = { range = true },
-  format = "{kind_icon}{symbol.name:Normal}",
-  hl_group = "lualine_c_normal",
-})
+  format = '{kind_icon}{symbol.name:Normal}',
+  hl_group = 'lualine_c_normal',
+}
 
 -- PERF: we don't need this lualine require madness 🤷
-local lualine_require = require("lualine_require")
+local lualine_require = require('lualine_require')
 lualine_require.require = require
 
-local Snacks = require("snacks")
+local Snacks = require('snacks')
 
 require('lualine').setup {
   globalstatus = true,
   options = {
-    theme = "everforest",
-    disabled_filetypes = { statusline = { "dashboard", "alpha", "ministarter", "snacks_dashboard" } },
+    disabled_filetypes = { statusline = { 'dashboard', 'alpha', 'ministarter', 'snacks_dashboard' } },
     section_separators = { left = '', right = '' },
-    component_separators = { left = '│', right = '│' }
+    component_separators = { left = '│', right = '│' },
   },
   sections = {
     lualine_a = { {
-      "mode",
+      'mode',
       fmt = function(str)
         return str:sub(1, 3)
       end,
     } },
-    lualine_b = { "branch" },
+    lualine_b = { 'branch' },
     lualine_c = {
       {
-        "diff",
+        'diff',
         symbols = {
-          added = " ",
-          modified = " ",
-          removed = " ",
+          added = ' ',
+          modified = ' ',
+          removed = ' ',
         },
         source = function()
           local gitsigns = vim.b.gitsigns_status_dict
@@ -78,16 +77,19 @@ require('lualine').setup {
         end,
       },
 
-      "filename",
+      'filename',
       {
         symbols and symbols.get,
         cond = function()
           return vim.b.trouble_lualine ~= false and symbols.has()
         end,
-      }
+      },
     },
 
-    lualine_x = { 'encoding', 'fileformat', 'filetype',
+    lualine_x = {
+      'encoding',
+      'fileformat',
+      'filetype',
       Snacks.profiler.status(),
       -- stylua: ignore
       {
@@ -109,12 +111,12 @@ require('lualine').setup {
       },
     },
     lualine_y = {
-      { "progress", padding = { left = 1, right = 1 } },
-      { "location", padding = { left = 0, right = 1 } },
+      { 'progress', padding = { left = 1, right = 1 } },
+      { 'location', padding = { left = 0, right = 1 } },
     },
     lualine_z = {
       { extra_mode_status },
-    }
+    },
   },
-  extensions = { "fzf" },
+  extensions = { 'fzf' },
 }

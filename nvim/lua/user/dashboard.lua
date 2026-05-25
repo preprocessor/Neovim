@@ -1,8 +1,10 @@
 local width = 83
-local border_hl = 'MsgArea'
-local plain_text_hl = 'MsgArea'
+local header_hl = 'MoreMsg'
+local border_hl = 'Type'
+local footer_hl = 'Type'
+local plain_text_hl = 'Constant'
 
-local filler = { text = { '│' .. string.rep(' ', width - 2) .. '│' }, hl = border_hl }
+local filler = { text = { '│' .. string.rep(' ', width - 2) .. '│', hl = border_hl } }
 
 local header = [[
 ┌─────────────────────────────────────────────────────────────────────────────────┐
@@ -28,7 +30,7 @@ local footer = [[
  ▀████████████████████████████████████████████████▄███████████████████▄██████████▀
   ▐▀██▀     ▀▀■▄ ▀▀▀▀▀▀▀▄▀▀▀▀▀▀▀▀■▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▄▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀████
    ▐█▀▄        ▀▄                                                ▄▀▀▀▀▄▄    ████▌
-   █   ▀▀▄▄▄■   ▀■▄▄  •-----•  ─  𝐍  Σ  Ø  𝐕  i 𝓶   ─  •-----• ■▀       ▀▄▄████▀
+   █   ▀▀▄▄▄■   ▀■▄▄  •-----•  ─  𝐍  Σ  Ø  𝐕  i 󰫺   ─  •-----• ■▀       ▀▄▄████▀
   ▀                                                                         ▀▄]]
 
 return {
@@ -70,15 +72,15 @@ return {
     end,
     desc = function(item)
       -- return { { item.desc, hl = "@constant.builtin" } }
-      return { { item.desc, hl = 'MsgArea' } }
+      return { { item.desc, hl = '@string.special.url' } }
     end,
   },
 
   width = width,
 
   sections = {
-    { text = { header, hl = border_hl } },
+    { text = { header, hl = header_hl } },
     { section = 'keys' },
-    { text = { footer, hl = border_hl } },
+    { text = { footer, hl = footer_hl } },
   },
 }

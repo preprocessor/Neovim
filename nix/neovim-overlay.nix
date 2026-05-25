@@ -36,6 +36,8 @@ let
 
     # Colorschemes
     tokyonight-nvim
+    gruvbox-material-nvim
+    gruvbox-nvim
 
     # Language
     nvim-lspconfig

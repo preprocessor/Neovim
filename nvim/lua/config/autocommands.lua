@@ -223,7 +223,7 @@ autocmd('LspAttach', {
     keymap.set('n', '<space>dd', vim.lsp.buf.document_symbol, desc('lsp [dd]ocument symbol'))
     keymap.set('n', '<M-CR>', vim.lsp.buf.code_action, desc('[lsp] code action'))
     keymap.set('n', '<M-l>', vim.lsp.codelens.run, desc('[lsp] run code lens'))
-    keymap.set('n', '<space>cr', vim.lsp.codelens.refresh, desc('lsp [c]ode lenses [r]efresh'))
+    keymap.set('n', '<space>cr', vim.lsp.codelens.enable, desc('lsp [c]ode lenses [r]efresh'))
     keymap.set('n', 'gr', vim.lsp.buf.references, desc('lsp [g]et [r]eferences'))
     keymap.set('n', '<space>f', function()
       vim.lsp.buf.format { async = true }
@@ -244,11 +244,11 @@ autocmd('LspAttach', {
       autocmd({ 'InsertLeave', 'BufWritePost', 'TextChanged' }, {
         group = group,
         callback = function()
-          vim.lsp.codelens.refresh { bufnr = bufnr }
+          vim.lsp.codelens.enable(true, { bufnr = bufnr })
         end,
         buffer = bufnr,
       })
-      vim.lsp.codelens.refresh { bufnr = bufnr }
+      vim.lsp.codelens.enable(true, { bufnr = bufnr })
     end
   end,
 })

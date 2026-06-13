@@ -109,6 +109,24 @@ require('snacks').setup {
   quickfile = { enabled = true },
   terminal = { enabled = false },
   picker = {
+    layouts = {
+      default = {
+        layout = {
+          box = "horizontal",
+          width = 0.9,
+          min_width = 120,
+          height = 0.9,
+          {
+            box = "vertical",
+            border = "single",
+            title = "{title} {live} {flags}",
+            { win = "input", height = 1, border = "bottom" },
+            { win = "list", border = "none" },
+          },
+          { win = "preview", title = "{preview}", border = "single", width = 0.6 },
+        },
+      },
+    },
     actions = {
       trouble_open = function(...)
         return require('trouble.sources.snacks').actions.trouble_open.action(...)
@@ -144,8 +162,9 @@ vim.api.nvim_create_autocmd('VimEnter', {
     Snacks.toggle.diagnostics():map('<leader>ud')
     Snacks.toggle.line_number():map('<leader>ul')
     Snacks.toggle
-      .option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' })
-      :map('<leader>uc')
+        .option('conceallevel',
+          { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' })
+        :map('<leader>uc')
     Snacks.toggle.treesitter():map('<leader>uT')
     Snacks.toggle.dim():map('<leader>uD')
     Snacks.toggle.animate():map('<leader>ua')

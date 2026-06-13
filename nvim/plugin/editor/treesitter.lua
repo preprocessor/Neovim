@@ -6,7 +6,7 @@ vim.g.did_load_treesitter_plugin = true
 local map = vim.keymap.set
 
 require('nvim-treesitter').setup {
-  indent = { enable = false },
+  indent = { enable = true },
   highlight = { enable = true },
   folds = { enable = true },
 }
@@ -65,10 +65,6 @@ end, { desc = 'previous [p]arameter (start)' })
 map({ 'n', 'x', 'o' }, '[P', function()
   require('nvim-treesitter-textobjects.move').goto_previous_end('@parameter.outer', 'textobjects')
 end, { desc = 'previous [P]arameter (end)' })
-
-require('treesitter-context').setup {
-  max_lines = 3,
-}
 
 require('ts_context_commentstring').setup()
 

@@ -12,22 +12,27 @@ require('gruvbox').setup {
     folds = true,
   },
   strikethrough = true,
-  invert_selection = true,
+  invert_selection = false,
   invert_signs = false,
-  inverse = true, -- invert background for search, diffs, statuslines and errors
+  inverse = true,    -- invert background for search, diffs, statuslines and errors
   contrast = 'hard', -- can be "hard", "soft" or empty string
   dim_inactive = false,
   transparent_mode = true,
+
+  overrides = {
+    SignColumn = { bg = '#3c3836' },
+    LineNr = { bg = '#282828' },
+  },
 }
 
 -- values shown are defaults and will be used if not provided
 require('gruvbox-material').setup {
-  italics = true, -- enable italics in general
+  italics = true,    -- enable italics in general
   contrast = 'hard', -- set contrast, can be any of "hard", "medium", "soft"
 }
 
 require('lualine').setup {
-  options = { theme = require('gruvbox-material.lualine').theme('hard') },
+  options = { theme = "gruvbox-material" },
 }
 
 vim.cmd.colorscheme('gruvbox')

@@ -36,6 +36,7 @@ let
 
     # Colorschemes
     tokyonight-nvim
+
     gruvbox-material-nvim
     gruvbox-nvim
 
@@ -45,7 +46,6 @@ let
     # treesitter-modules-nvim # syntax tree parser | https://github.com/MeanderingProgrammer/treesitter-modules.nvim/
     nvim-treesitter.withAllGrammars
     ts-comments-nvim # enhance Neovim's native comments | https://github.com/folke/ts-comments.nvim/
-    nvim-treesitter-context # nvim-treesitter-context
     nvim-treesitter-textobjects # https://github.com/nvim-treesitter/nvim-treesitter-textobjects/
     nvim-ts-context-commentstring # https://github.com/joosepalviste/nvim-ts-context-commentstring/
 
@@ -58,6 +58,7 @@ let
     noice-nvim # Highly experimental UI plugin | https://github.com/folke/noice.nvim/
     yazi-nvim # Use yazi within neovim
     virt-column-nvim # Display a character as the colorcolumn.
+    pretty-fold-nvim # Foldtext customization in Neovim
 
     blink-cmp # Completion plugin | https://github.com/saghen/blink.cmp
     blink-cmp-dictionary
@@ -95,7 +96,6 @@ let
     snacks-nvim # A collection of small QoL plugins | https://github.com/folke/snacks.nvim/
     comment-box-nvim # draw boxes and lines in comments | https://github.com/LudoPinelli/comment-box.nvim/
     nvim-highlight-colors # Highlight colors | https://github.com/brenoprata10/nvim-highlight-colors/
-    todo-comments-nvim # Highlight, list and search todo comments | https://github.com/folke/todo-comments.nvim/
     persistence-nvim # Simple session management | https://github.com/folke/persistence.nvim/
 
     # libraries that other plugins depend on
@@ -115,7 +115,8 @@ let
   extraPackages = with pkgs; [
     # language servers, etc.
     lua-language-server
-    nil # nix LSP
+    nixd # nix LSP
+    nixfmt-rs
     rust-analyzer
     rustfmt
   ];

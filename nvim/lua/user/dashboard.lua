@@ -72,7 +72,7 @@ return {
     end,
     desc = function(item)
       -- return { { item.desc, hl = "@constant.builtin" } }
-      return { { item.desc, hl = '@string.special.url' } }
+      return { { item.desc, hl = 'Conceal' } }
     end,
   },
 

@@ -97,12 +97,13 @@ local root_patterns = {
 }
 
 require('snacks').setup {
+  animate = { enabled = false },
   dashboard = require('user.dashboard'),
-  indent = { enabled = true },
+  indent = { enabled = false },
   input = { enabled = true },
   notifier = { enabled = true },
   scope = { enabled = true },
-  scroll = { enabled = true },
+  scroll = { enabled = false },
   statuscolumn = { enabled = false }, -- we set this in options.lua
   words = { enabled = true },
   bigfile = { enabled = true },
@@ -112,18 +113,18 @@ require('snacks').setup {
     layouts = {
       default = {
         layout = {
-          box = "horizontal",
+          box = 'horizontal',
           width = 0.9,
           min_width = 120,
           height = 0.9,
           {
-            box = "vertical",
-            border = "single",
-            title = "{title} {live} {flags}",
-            { win = "input", height = 1, border = "bottom" },
-            { win = "list", border = "none" },
+            box = 'vertical',
+            border = 'single',
+            title = '{title} {live} {flags}',
+            { win = 'input', height = 1, border = 'bottom' },
+            { win = 'list', border = 'none' },
           },
-          { win = "preview", title = "{preview}", border = "single", width = 0.6 },
+          { win = 'preview', title = '{preview}', border = 'single', width = 0.6 },
         },
       },
     },
@@ -150,48 +151,42 @@ require('snacks').setup {
   },
 }
 
--- [INFO] These are in an autocmd because these overwrite the set values otherwise
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    -- toggle options
-    -- LazyVim.format.snacks_toggle():map("<leader>uf")
-    -- LazyVim.format.snacks_toggle(true):map("<leader>uF")
-    Snacks.toggle.option('spell', { name = 'Spelling' }):map('<leader>us')
-    Snacks.toggle.option('wrap', { name = 'Wrap' }):map('<leader>uw')
-    Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')
-    Snacks.toggle.diagnostics():map('<leader>ud')
-    Snacks.toggle.line_number():map('<leader>ul')
-    Snacks.toggle
-        .option('conceallevel',
-          { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' })
-        :map('<leader>uc')
-    Snacks.toggle.treesitter():map('<leader>uT')
-    Snacks.toggle.dim():map('<leader>uD')
-    Snacks.toggle.animate():map('<leader>ua')
-    Snacks.toggle.indent():map('<leader>ug')
-    Snacks.toggle.scroll():map('<leader>uS')
-    Snacks.toggle.profiler():map('<leader>dpp')
-    Snacks.toggle.profiler_highlights():map('<leader>dph')
+-- toggle options
+-- LazyVim.format.snacks_toggle():map("<leader>uf")
+-- LazyVim.format.snacks_toggle(true):map("<leader>uF")
+Snacks.toggle.option('spell', { name = 'Spelling' }):map('<leader>us')
+Snacks.toggle.option('wrap', { name = 'Wrap' }):map('<leader>uw')
+Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')
+Snacks.toggle.diagnostics():map('<leader>ud')
+Snacks.toggle.line_number():map('<leader>ul')
+Snacks.toggle
+  .option('conceallevel', { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' })
+  :map('<leader>uc')
+Snacks.toggle.dim():map('<leader>uD')
+Snacks.toggle.treesitter():map('<leader>uT')
+-- Snacks.toggle.animate():map('<leader>ua')
+-- Snacks.toggle.indent():map('<leader>ug')
+-- Snacks.toggle.scroll():map('<leader>uS')
+Snacks.toggle.profiler():map('<leader>dpp')
+Snacks.toggle.profiler_highlights():map('<leader>dph')
 
-    if vim.lsp.inlay_hint then
-      Snacks.toggle.inlay_hints():map('<leader>uh')
-    end
+if vim.lsp.inlay_hint then
+  Snacks.toggle.inlay_hints():map('<leader>uh')
+end
 
-    Snacks.toggle.zoom():map('<leader>wm'):map('<leader>uZ')
-    Snacks.toggle.zen():map('<leader>uz')
+Snacks.toggle.zoom():map('<leader>wm'):map('<leader>uZ')
+Snacks.toggle.zen():map('<leader>uz')
 
-    -- gitsigns
-    Snacks.toggle({
-      name = 'Git Signs',
-      get = function()
-        return require('gitsigns.config').config.signcolumn
-      end,
-      set = function(state)
-        require('gitsigns').toggle_signs(state)
-      end,
-    }):map('<leader>uG')
+-- gitsigns
+Snacks.toggle({
+  name = 'Git Signs',
+  get = function()
+    return require('gitsigns.config').config.signcolumn
   end,
-})
+  set = function(state)
+    require('gitsigns').toggle_signs(state)
+  end,
+}):map('<leader>uG')
 
 local map = vim.keymap.set
 

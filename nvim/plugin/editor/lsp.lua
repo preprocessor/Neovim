@@ -2,33 +2,31 @@
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
   callback = function(event)
-
     local map = function(keys, func, desc, mode)
       mode = mode or 'n'
       vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
     end
 
     -- Mnemonic: k = "kill (toggle) line diagnostics"
-    map('<Leader>k', function()
-      if vim.diagnostic.config().virtual_lines then
-        vim.diagnostic.config({ virtual_lines = false })
-      else
-        vim.diagnostic.config({ virtual_lines = true })
-      end
-    end, "[K]ill (toggle) line diagnostics", 'n')
-    --
+    -- map('<Leader>k', function()
+    --   if vim.diagnostic.config().virtual_lines then
+    --     vim.diagnostic.config { virtual_lines = false }
+    --   else
+    --     vim.diagnostic.config { virtual_lines = true }
+    --   end
+    -- end, '[K]ill (toggle) line diagnostics', 'n')
+
     -- Mnemonic: l = "toggle line diagnostics floating window"
     map('<Leader>l', function()
-      vim.diagnostic.open_float({ border = 'single' })
-    end, "[L]ine diagnostics", 'n')
+      vim.diagnostic.open_float { border = 'single' }
+    end, '[L]ine diagnostics', 'n')
 
-    map('<c-]>', vim.lsp.buf.definition, "Definition", 'n')
+    map('<c-]>', vim.lsp.buf.definition, 'Definition', 'n')
     map('?', function()
-      vim.lsp.buf.hover({ border = 'single' })
-    end, "Documentation", "n")
+      vim.lsp.buf.hover { border = 'single' }
+    end, 'Documentation', 'n')
 
-
-    map('gR', vim.lsp.buf.rename, '[R]e[n]ame', "n")
+    map('gR', vim.lsp.buf.rename, '[R]e[n]ame', 'n')
     -- Rename the variable under your cursor.
     --  Most Language Servers support renaming across files, etc.
 
@@ -42,9 +40,15 @@ vim.api.nvim_create_autocmd('LspAttach', {
     map('gy', vim.lsp.buf.type_definition, 'Goto T[y]pe Definition', 'n')
     map('gD', vim.lsp.buf.declaration, 'Goto Declaration', 'n')
 
-    map('K', function() return vim.lsp.buf.hover() end, 'Hover', 'n')
-    map('gK', function() return vim.lsp.buf.signature_help() end, 'Signature Help', 'n')
-    map('<c-k>', function() return vim.lsp.buf.signature_help() end, 'Signature Help', 'i')
+    map('K', function()
+      return vim.lsp.buf.hover()
+    end, 'Hover', 'n')
+    map('gK', function()
+      return vim.lsp.buf.signature_help()
+    end, 'Signature Help', 'n')
+    map('<c-k>', function()
+      return vim.lsp.buf.signature_help()
+    end, 'Signature Help', 'i')
 
     map('<leader>cC', vim.lsp.codelens.refresh, 'Refresh & Display Codelens', 'n')
     map('<leader>cr', vim.lsp.buf.rename, 'Rename', 'n')
@@ -102,11 +106,14 @@ local servers = {
   -- Special Lua Config, as recommended by neovim help docs
   lua_ls = {
     on_init = function(client)
-      client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
+      -- client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
 
       if client.workspace_folders then
         local path = client.workspace_folders[1].name
-        if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+        if
+          path ~= vim.fn.stdpath('config')
+          and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc'))
+        then
           return
         end
       end
@@ -121,28 +128,16 @@ local servers = {
         'selene.yml',
         '.git',
       }, { upward = true })[1])
-
-      client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-        runtime = {
-          version = 'LuaJIT',
-          path = { 'lua/?.lua', 'lua/?/init.lua' },
-        },
-        workspace = {
-          checkThirdParty = false,
-          -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
-          --  See https://github.com/neovim/nvim-lspconfig/issues/3189
-          library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
-            '${3rd}/luv/library',
-            '${3rd}/busted/library',
-          }),
-        },
-      })
     end,
     ---@type lspconfig.settings.lua_ls
     settings = {
       Lua = {
         -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-        format = { enable = false }, -- Formatted by stylua
+        format = { enable = true }, -- Formatted by stylua
+        runtime = {
+          version = 'LuaJIT',
+          path = { 'lua/?.lua', 'lua/?/init.lua' },
+        },
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global, etc.
@@ -159,11 +154,10 @@ local servers = {
         telemetry = {
           enable = false,
         },
-        -- hint = { -- inlay hints (supported in Neovim >= 0.10)
-        --   enable = true,
-        -- },
+        hint = {
+          enable = false,
+        },
       },
-
     },
   },
 }
@@ -172,7 +166,6 @@ for name, server in pairs(servers) do
   vim.lsp.config(name, server)
   vim.lsp.enable(name)
 end
-
 
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'nix',
@@ -206,7 +199,6 @@ vim.api.nvim_create_autocmd('FileType', {
     }
   end,
 })
-
 
 -- local map = vim.keymap.set
 --

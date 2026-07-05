@@ -1,7 +1,7 @@
 local width = 83
-local header_hl = 'MoreMsg'
-local border_hl = 'Type'
-local footer_hl = 'Type'
+local header_hl = 'ModeMsg'
+local border_hl = 'StatusLine'
+local footer_hl = 'StatusLine'
 local plain_text_hl = 'Constant'
 
 local filler = { text = { '│' .. string.rep(' ', width - 2) .. '│', hl = border_hl } }

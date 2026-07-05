@@ -1,5 +1,4 @@
 local hop = require('hop')
-local directions = require('hop.hint').HintDirection
 
 hop.setup {
   keys = 'etovxqpdygfblzhckisuran',
@@ -11,14 +10,6 @@ local map = vim.keymap.set
 map({ 'n', 'x', 'o' }, 's', function()
   vim.cmd('HopWordMW')
 end, { desc = 'Hop' })
-
-map({ 'n', 'x', 'o' }, 'f', function()
-  hop.hint_char1 { direction = directions.AFTER_CURSOR }
-end, { remap = true })
-
-map({ 'n', 'x', 'o' }, 'F', function()
-  hop.hint_char1 { direction = directions.BEFORE_CURSOR }
-end, { remap = true })
 
 map({ 'n', 'x', 'o' }, 't', function()
   hop.hint_words {

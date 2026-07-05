@@ -26,16 +26,6 @@ local function extra_mode_status()
   return ''
 end
 
-local trouble = require('trouble')
-local symbols = trouble.statusline {
-  mode = 'symbols',
-  groups = {},
-  title = false,
-  filter = { range = true },
-  format = '{kind_icon}{symbol.name:Normal}',
-  hl_group = 'lualine_c_normal',
-}
-
 -- PERF: we don't need this lualine require madness 🤷
 local lualine_require = require('lualine_require')
 lualine_require.require = require
@@ -56,41 +46,11 @@ require('lualine').setup {
         return str:sub(1, 3)
       end,
     } },
-    lualine_b = { 'branch' },
-    lualine_c = {
-      {
-        'diff',
-        symbols = {
-          added = ' ',
-          modified = ' ',
-          removed = ' ',
-        },
-        source = function()
-          local gitsigns = vim.b.gitsigns_status_dict
-          if gitsigns then
-            return {
-              added = gitsigns.added,
-              modified = gitsigns.changed,
-              removed = gitsigns.removed,
-            }
-          end
-        end,
-      },
-
-      'filename',
-      {
-        symbols and symbols.get,
-        cond = function()
-          return vim.b.trouble_lualine ~= false and symbols.has()
-        end,
-      },
-    },
+    lualine_b = {},
+    lualine_c = { 'filename' },
 
     lualine_x = {
-      'encoding',
-      'fileformat',
       'filetype',
-      Snacks.profiler.status(),
       -- stylua: ignore
       {
         function() return require("noice").api.status.command.get() end,
@@ -102,12 +62,6 @@ require('lualine').setup {
         function() return require("noice").api.status.mode.get() end,
         cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
         color = function() return { fg = Snacks.util.color("Constant") } end,
-      },
-      -- stylua: ignore
-      {
-        function() return "  " .. require("dap").status() end,
-        cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-        color = function() return { fg = Snacks.util.color("Debug") } end,
       },
     },
     lualine_y = {

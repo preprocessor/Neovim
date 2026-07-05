@@ -2,6 +2,13 @@ local lint = require('lint')
 lint.linters_by_ft = {
   markdown = { 'markdownlint' },
 }
+local markdownlint = lint.linters.markdownlint
+markdownlint.args = {
+  '--disable',
+  'MD013',
+  'MD012',
+  '--', -- Required
+}
 
 -- To allow other plugins to add linters to require('lint').linters_by_ft,
 -- instead set linters_by_ft like this:
@@ -16,7 +23,6 @@ lint.linters_by_ft = {
 --   inko = { "inko" },
 --   janet = { "janet" },
 --   json = { "jsonlint" },
---   markdown = { "vale" },
 --   rst = { "vale" },
 --   ruby = { "ruby" },
 --   terraform = { "tflint" },

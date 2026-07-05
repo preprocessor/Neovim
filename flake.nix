@@ -41,6 +41,7 @@
       packages = forEachPkgs (pkgs: {
         default = pkgs.nvim-pkg;
         nvim = pkgs.nvim-pkg;
+        mdvim = pkgs.nvim-pkg-markdown;
       });
 
       devShells = forEachPkgs (pkgs: {

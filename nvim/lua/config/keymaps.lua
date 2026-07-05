@@ -15,12 +15,6 @@ map({ 'n', 'x' }, '<Down>', "v:count == 0 ? 'gj' : 'j'", { desc = 'Down', expr =
 map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
 map({ 'n', 'x' }, '<Up>', "v:count == 0 ? 'gk' : 'k'", { desc = 'Up', expr = true, silent = true })
 
--- Move to window using the <ctrl> hjkl keys
-map('n', '<C-h>', '<C-w>h', { desc = 'Go to Left Window', remap = true })
-map('n', '<C-j>', '<C-w>j', { desc = 'Go to Lower Window', remap = true })
-map('n', '<C-k>', '<C-w>k', { desc = 'Go to Upper Window', remap = true })
-map('n', '<C-l>', '<C-w>l', { desc = 'Go to Right Window', remap = true })
-
 -- Resize window using <ctrl> arrow keys
 map('n', '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' })
 map('n', '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' })
@@ -132,16 +126,11 @@ map('n', ']w', diagnostic_goto(true, 'WARN'), { desc = 'Next Warning' })
 map('n', '[w', diagnostic_goto(false, 'WARN'), { desc = 'Prev Warning' })
 
 -- highlights under cursor
-map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
-map('n', '<leader>uI', function()
-  vim.treesitter.inspect_tree()
-  vim.api.nvim_input('I')
-end, { desc = 'Inspect Tree' })
-
--- windows
-map('n', '<leader>-', '<C-W>s', { desc = 'Split Window Below' })
-map('n', '<leader>|', '<C-W>v', { desc = 'Split Window Right' })
-map('n', '<leader>wd', '<C-W>c', { desc = 'Delete Window' })
+-- map('n', '<leader>ui', vim.show_pos, { desc = 'Inspect Pos' })
+-- map('n', '<leader>uI', function()
+--   vim.treesitter.inspect_tree()
+--   vim.api.nvim_input('I')
+-- end, { desc = 'Inspect Tree' })
 
 -- Shift + u = redo
 map('n', '<S-U>', ':redo<cr>')

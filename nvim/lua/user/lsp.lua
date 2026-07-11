@@ -18,6 +18,8 @@ function M.make_client_capabilities()
       },
     },
   })
+
+  capabilities.textDocument.codeLens = nil -- explicitly strip after merging
   -- Add any additional plugin capabilities here.
   -- Make sure to follow the instructions provided in the plugin's docs.
   return capabilities

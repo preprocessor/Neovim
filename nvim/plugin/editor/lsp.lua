@@ -50,9 +50,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
       return vim.lsp.buf.signature_help()
     end, 'Signature Help', 'i')
 
-    map('<leader>cC', vim.lsp.codelens.refresh, 'Refresh & Display Codelens', 'n')
     map('<leader>cr', vim.lsp.buf.rename, 'Rename', 'n')
-    map('<leader>cc', vim.lsp.codelens.run, 'Run Codelens', { 'n', 'x' })
 
     local client = vim.lsp.get_client_by_id(event.data.client_id)
     if client and client:supports_method('textDocument/documentHighlight', event.buf) then

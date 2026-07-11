@@ -8,8 +8,6 @@ local excluded = {
   'build/',
   'target/',
   'result/',
-  'dadbod_ui/tmp/',
-  'dadbod_ui/dev/',
   'package-lock.json',
   'pnpm-lock.yaml',
   'yarn.lock',
@@ -213,22 +211,18 @@ map('n', '<leader>,', function()
 end, { desc = 'Buffers' })
 
 map('n', '<leader>/', function()
-  -- Snacks.picker.grep()
-  local git_root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
-  local cwd = (git_root and vim.v.shell_error == 0) and git_root or vim.fn.getcwd()
-  Snacks.picker.grep { cwd = cwd }
+  local root_dir = vim.fs.dirname(vim.fs.find(root_patterns, { upward = true })[1]) or vim.fn.getcwd()
+  Snacks.picker.grep { cwd = root_dir }
 end, { desc = 'Grep (Root Dir)' })
+
+map('n', '<leader><space>', function()
+  local root_dir = vim.fs.dirname(vim.fs.find(root_patterns, { upward = true })[1]) or vim.fn.getcwd()
+  Snacks.picker.files { cwd = root_dir }
+end, { desc = 'Find Files (Root Dir)' })
 
 map('n', '<leader>:', function()
   Snacks.picker.command_history()
 end, { desc = 'Command History' })
-
-map('n', '<leader><space>', function()
-  -- Snacks.picker.smart()
-  local git_root = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
-  local cwd = (git_root and vim.v.shell_error == 0) and git_root or vim.fn.getcwd()
-  Snacks.picker.files { cwd = cwd }
-end, { desc = 'Find Files (Root Dir)' })
 
 map('n', '<leader>n', function()
   Snacks.picker.notifications()
